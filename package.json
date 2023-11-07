@@ -1,0 +1,21 @@
+{
+  "name": "typescript_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "tsx": "^3.14.0",
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
+  }
+}
