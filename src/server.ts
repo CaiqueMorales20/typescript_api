@@ -1,14 +1,60 @@
-interface User {
-  name: string
-  age: number
-}
+// Imports
+import { DatabaseMemory } from "./db/database-memory"
+const express = require('express')
+const app = express()
+app.use(express.json())
 
-function saveUserToDatabase(user: User) {
-  // salvar no banco de dados
-  console.log(`User ${user.name} saved on Database`)
-}
+// Database
+const database = new DatabaseMemory()
 
-saveUserToDatabase({
-  name: 'Caique',
-  age: 20}
-)
+// Types
+import { Request, Response } from "express"
+
+// Routes
+app.get('/users', async (req: Request, res: Response) => {
+  const search = req.query.search
+
+  const users = await database.list(search)
+
+  return res.send(users)
+})
+
+app.post('/users', async (req: Request, res: Response) => {
+  const {name, age, email, cpf}: userType = req.body
+
+  await database.create({
+    name,
+    age,
+    email,
+    cpf
+  })
+
+  return res.status(204).send('Usuário criado.')
+
+})
+
+app.put('/users/:id', async (req: Request, res: Response) => {
+  const {name, age, email, cpf}: userType = req.body
+  const {id} = req.params
+  
+  await database.update(id, {
+    name,
+    age,
+    email,
+    cpf
+  })
+
+  return res.status(200).send('Usuário atualizado.')
+})
+
+app.delete('/users/:id', async (req: Request, res: Response) => {
+  const {id} = req.params
+
+  await database.delete(id)
+
+  return res.status(200).send('Usuário excluído')
+})
+
+
+// Ports
+app.listen(process.env.PORT ?? 3333)
